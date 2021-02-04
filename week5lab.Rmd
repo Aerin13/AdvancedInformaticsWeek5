@@ -1,0 +1,206 @@
+---
+title: "Skylar Wyant - Week 5 Lab"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(reticulate)
+use_python("c:\\programdata\\anaconda3", required = TRUE)
+py_run_string("import os as os")
+py_run_string("os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = 'C:/programdata/Anaconda3/Library/plugins/platforms'")
+```
+
+```{python}
+import matplotlib.pyplot as plt
+from matplotlib import rc
+import seaborn as sns
+```
+
+#### Base figure code
+```{python}
+f, ax = plt.subplots()
+x = [i for i in range(10)]
+y = [i**2 for i in x]
+ax.plot(x, y)
+ax.set_xlabel('x')
+ax.set_ylabel('y');
+```
+
+#### Plot 1
+Change it so that the x axis label is σ and the y axis label is τ. Those are the Greek letters “sigma” and “tau”, respectively.
+
+Take the same plot, and change the x axis label to σ2s.
+
+For the same plot as above, change the plot so that the line is red, “dot-dash”, and 3 times the default line thickness.
+```{python}
+f, ax = plt.subplots()
+x = [i for i in range(10)]
+y = [i**2 for i in x]
+# The default linewidth is 1.5, so multiply that by 3
+ax.plot(x, y, color='red', linewidth=3*1.5, linestyle='dashdot')
+ax.set_xlabel('$\sigma2s$')
+ax.set_ylabel('$\\tau$')
+plt.show()
+```
+
+#### Plot 2
+Take the graph we started with, and assume there’s a variable y = 7. Add a title to the graph that says Γ=7. (That’s the Greek letter “gamma”.) Do it using the variable! Don’t “hard-code” in the value!
+```{python}
+y = 7
+title = '$\Gamma$' + '=' + str(y)
+f, ax = plt.subplots()
+x = [i for i in range(10)]
+y = [i**2 for i in x]
+ax.plot(x, y)
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+plt.title(title)
+plt.show()
+```
+
+#### Plot 3
+Take the graph we started with, and assume there’s a variable y = 7. Add a text element at coordinates x=0.1, y=0.4 to the graph that says Γ=7.
+```{python}
+y = 7
+textstr = '$\Gamma$' + '=' + str(y)
+f, ax = plt.subplots()
+x = [i for i in range(10)]
+y = [i**2 for i in x]
+ax.plot(x, y)
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.text(0.1, 0.4, textstr)
+plt.show()
+```
+
+#### Saving files
+Save one of your graphics in the following formats:
+
+- pdf with 18 point font, 10" by 10" square
+- tiff with 18 point font, 10" by 10" square and the x axis font is 1/2 the global font size.
+- 72 dpi png with 18 point font, 10" by 10" square
+- 300 dpi png with 18 point font, 10" by 10" square
+```{python}
+rc('font', size=18)
+f, ax = plt.subplots()
+x = [i for i in range(10)]
+y = [i**2 for i in x]
+ax.plot(x, y)
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.text(0.1, 0.4, textstr)
+f.set_size_inches(10, 10)
+plt.savefig('save1.pdf')
+```
+```{python}
+rc('font', size=18)
+f, ax = plt.subplots()
+x = [i for i in range(10)]
+y = [i**2 for i in x]
+ax.plot(x, y)
+ax.set_xlabel('x', fontsize=plt.rcParams['font.size']/2)
+ax.set_ylabel('y')
+ax.text(0.1, 0.4, textstr)
+f.set_size_inches(10, 10)
+plt.savefig('save2.tiff')
+```
+```{python}
+rc('font', size=18)
+f, ax = plt.subplots()
+x = [i for i in range(10)]
+y = [i**2 for i in x]
+ax.plot(x, y)
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.text(0.1, 0.4, textstr)
+f.set_size_inches(10, 10)
+plt.savefig('save3.png', dpi=72)
+```
+```{python}
+rc('font', size=18)
+f, ax = plt.subplots()
+x = [i for i in range(10)]
+y = [i**2 for i in x]
+ax.plot(x, y)
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.text(0.1, 0.4, textstr)
+f.set_size_inches(10, 10)
+plt.savefig('save4.png', dpi=300)
+```
+
+#### Seaborn portion
+Repeat the various manipulations above. Where the above instructions refer to lines, change point color/size/shape instead.
+
+#### Base figure
+```{python}
+plt.clf()
+mtcars = r.mtcars
+f = sns.scatterplot(
+    data=mtcars, 
+    x = 'cyl', 
+    y = 'mpg'
+)
+plt.show()
+```
+
+#### Plot 1
+```{python}
+f = sns.scatterplot(
+    data=mtcars, 
+    x = 'cyl', 
+    y = 'mpg',
+    color = 'red',
+    s = 450,
+    marker = 'x'
+)
+f.set(xlabel='$\sigma2s$', ylabel='$\\tau$');
+plt.show()
+```
+
+#### Plot 2
+```{python}
+y = 7
+title = '$\Gamma$' + '=' + str(y)
+f = sns.scatterplot(
+    data=mtcars, 
+    x = 'cyl', 
+    y = 'mpg'
+)
+f.set(title = title)
+plt.show()
+```
+
+#### Plot 3
+Note that I moved the coords of the text box so that it would show up.
+```{python}
+y = 7
+textstr = '$\Gamma$' + '=' + str(y)
+f = sns.scatterplot(
+    data=mtcars, 
+    x = 'cyl', 
+    y = 'mpg'
+)
+f.text(5, 15,textstr)
+plt.show()
+```
+
+#### Multi-panel figures
+Plot two plots side by side. (It is fine to plot the same plot next to itself.)
+
+Do it again, but as a 2x2 matrix of 4 plots.
+```{python}
+fig, axs = plt.subplots(ncols=2)
+sns.scatterplot(data=mtcars, x = 'cyl', y = 'mpg', ax=axs[0])
+sns.scatterplot(data=mtcars, x = 'cyl', y = 'mpg', ax=axs[1])
+plt.show()
+```
+```{python}
+fig, axs = plt.subplots(ncols=2, nrows=2)
+sns.scatterplot(data=mtcars, x = 'cyl', y = 'mpg', ax=axs[0][0])
+sns.scatterplot(data=mtcars, x = 'cyl', y = 'mpg', ax=axs[1][0])
+sns.scatterplot(data=mtcars, x = 'cyl', y = 'mpg', ax=axs[0][1])
+sns.scatterplot(data=mtcars, x = 'cyl', y = 'mpg', ax=axs[1][1])
+plt.show()
+```
